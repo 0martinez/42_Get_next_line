@@ -8,4 +8,6 @@
 # include <fcntl.h>
 # include <stdlib.h>
 
+static int ls;
+
 #endif

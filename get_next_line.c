@@ -19,6 +19,7 @@ static char *ft_strjoin(char *last, char *str)
 	int	j;
 
 	i = ft_strlen(last);
+	printf("%d", i);
 	i += ft_strlen(str);
 	j = 0;
 	line = (char *) malloc(sizeof(char) * i + 1);
@@ -43,41 +44,48 @@ static char *ft_strjoin(char *last, char *str)
 char *get_next_line(int fd)
 {
 	char *str;
-	char *line;
+	static char *line;
 	int	xd;
-	int size;
 	int aux;
 
-	size = 1;
-	xd = 1;
+	xd = BUFFER_SIZE;
 	aux = 0;
-	str = malloc(sizeof(char) * 10 + 1);
+	str = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!str)
 		return (0);
-	//printf("%d", xd);
-	while (xd == size)
+	while (xd > 0)
 	{
-		xd = read(fd, str, size);
+		xd = read(fd, str, BUFFER_SIZE);
 		str[xd] = 0;
-		//str[xd] = 0;
-		//strjoin();
+		//printf("|%s|", str);
+		line = ft_strjoin(line, str);
+		//free(str);
 		aux += xd;
-		printf("+%d+", xd);
+		//printf("+%d+", xd);
 	}
-	printf("yy%dyy", aux);
-	str[aux] = 0;
-	return (str);
+	//xd = read(fd, str, BUFFER_SIZE);
+	//str[xd] = 0;
+	line[aux] = 0;
+	//ls = xd;
+	return (line);
 }
 
 int main(void)
 {
     int	fd;
+	int xd = 0;
 	char *str;
-
 	fd = open("LINES.txt", O_RDONLY);
-	while
+	printf("//%d//", BUFFER_SIZE);
 	str = get_next_line(fd);
-	printf("%s", str);
+	while(str != 0)
+	{
+		printf("-%s-", str);
+		free(str);
+		str = get_next_line(fd);
+	}
+	//str = get_next_line(fd);
+	//printf("-%s-", str);
 	free(str);
 	close(fd);
 	return (0);
