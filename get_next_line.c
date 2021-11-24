@@ -6,7 +6,7 @@
 /*   By: omartine <omartine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 18:51:57 by omartine          #+#    #+#             */
-/*   Updated: 2021/11/23 21:11:37 by omartine         ###   ########.fr       */
+/*   Updated: 2021/11/24 17:34:41 by omartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,14 @@ static char	*ft_strjoin(char *last, char *str)
 	char	*line;
 	int		j;
 
-	i = ft_strlen(last);
+	i = 0;
+	if (!last)
+	{
+	}
+	else
+		i = ft_strlen(last);
 	i += ft_strlen(str);
+	printf("%d", i);
 	j = 0;
 	line = (char *) malloc(sizeof(char) * i + 1);
 	if (!line)
@@ -105,6 +111,7 @@ char	*get_next_line(int fd)
 	/*if (check_container(line) == 1)
 		return (ft_adeblas(line));*/
 	str = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	line = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!str)
 		return (0);
 	while (xd > 0 && check_container(line) != 1)
@@ -112,6 +119,10 @@ char	*get_next_line(int fd)
 		xd = read(fd, str, BUFFER_SIZE);
 		str[xd] = 0;
 		line = ft_strjoin(line, str);
+	}
+	if (check_container(line) == 1)
+	{
+		return (ft_adeblas(line));
 	}
 	free(str);
 	return (0);
@@ -122,14 +133,16 @@ int main(void)
 	int		fd;
 	int		xd = 0;
 	char	*str;
+
+	printf("holla");
 	fd = open("LINES", O_RDONLY);
 	str = get_next_line(fd);
-	while (str != 0)
+	/*while (str != 0)
 	{
 		printf("-%s-", str);
 		free(str);
 		str = get_next_line(fd);
-	}
+	}*/
 	free(str);
 	close(fd);
 	return (0);
