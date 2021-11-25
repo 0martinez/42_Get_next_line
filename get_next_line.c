@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: omartine <omartine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/23 18:51:57 by omartine          #+#    #+#             */
-/*   Updated: 2021/11/24 17:34:41 by omartine         ###   ########.fr       */
+/*   Created: 2021/11/24 17:35:34 by omartine          #+#    #+#             */
+/*   Updated: 2021/11/25 20:28:59 by omartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,115 +17,134 @@ static int	ft_strlen(char *str)
 	int	i;
 
 	i = 0;
-	while(str[i] != 0)
+	while (str[i] != 0)
 		i++;
-	return (0);
+	return (i);
 }
 
-static char	*ft_strjoin(char *last, char *str)
+static char	*ft_strjoin(char *container, char *str)
 {
+	char	*new_container;
 	int		i;
-	char	*line;
 	int		j;
 
 	i = 0;
-	if (!last)
-	{
-	}
-	else
-		i = ft_strlen(last);
-	i += ft_strlen(str);
-	printf("%d", i);
 	j = 0;
-	line = (char *) malloc(sizeof(char) * i + 1);
-	if (!line)
-		return (0);
-	line[i] = 0;
+	if (container[0] != 0)
+		i = ft_strlen(container);
+	i += ft_strlen(str);
+	new_container = (char *) malloc(sizeof(char) * i + 1);
+	new_container[i] = 0;
 	i = 0;
-	while (last[i] != 0)
+	if (container[0] != 0)
 	{
-		line[i] = last[i];
-		i++;
+		while (container[i] != 0)
+		{
+			new_container[i] = container[i];
+			i++;
+		}
 	}
-	while (str[j] != 0 && str[j] != '\n')
+	while (str[j] != 0)
 	{
-		line[i] = str[j];
+		new_container[i] = str[j];
 		i++;
 		j++;
 	}
-	return (line);
+	free(container);
+	return (new_container);
 }
 
-static int	check_container(const char *line)
+static int	check_container(char *container)
 {
 	int	i;
 
 	i = 0;
-	while (line[i] != 0)
+	while (container[i] != 0)
 	{
-		if (line[i] == '\n')
-			return (1);
+		if (container[i] == '\n')
+			return (i + 1);
 		i++;
 	}
 	return (0);
 }
 
-static char	*ft_return(int i, const char *line)
+static char	*ft_line_return(char *container, int jump)
 {
-	static int		j;
-	char			*str;
-
-	j = 0;
-	str = malloc(sizeof(char) * i + 1);
-	while (j < i)
-	{
-		str[j] = line[j];
-		j++;
-	}
-	str[j] = 0;
-	j++;
-	return (str);
-}
-
-static char	*ft_adeblas(const char *line)
-{
-	static int		i;
+	int		i;
+	char	*line_return;
 
 	i = 0;
-	while (line[i] != '\n')
+	line_return = malloc(sizeof(char) * jump + 1);
+	if (!line_return)
+		return (0);
+	line_return[jump] = 0;
+	while (i < jump)
+	{
+		line_return[i] = container[i];
 		i++;
-	i++;
-	return (ft_return(i - 1, line));
+	}
+	return (line_return);
+}
+
+static char	*new_container(char *container, int jump)
+{
+	char	*new_container;
+	int		i;
+	int		j;
+
+	i = ft_strlen(container);
+	j = 0;
+	new_container = malloc(sizeof(char) * (i - jump) + 1);
+	if (!new_container)
+		return (0);
+	new_container[i - jump] = 0;
+	while (jump <= i)
+	{
+		new_container[j] = container[jump];
+		j++;
+		jump++;
+	}
+	free(container);
+	return (new_container);
 }
 
 char	*get_next_line(int fd)
 {
+	int			jump;
+	int			bites;
+	char		*line_return;
 	char		*str;
-	static char	*line;
-	int			xd;
-	int			aux;
+	static char	*container;
 
-	xd = BUFFER_SIZE;
-	aux = 0;
-	//ft_str para retornar el trozo de tu container y le asignas un nuevo valor sin tu str
-	/*if (check_container(line) == 1)
-		return (ft_adeblas(line));*/
-	str = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	line = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!str)
+	if (!fd)
 		return (0);
-	while (xd > 0 && check_container(line) != 1)
+	bites = 1;
+	jump = 0;
+	str = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!container)
+		container = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!str || !container)
+		return (0);
+	while (bites > 0 && check_container(container) == 0)
 	{
-		xd = read(fd, str, BUFFER_SIZE);
-		str[xd] = 0;
-		line = ft_strjoin(line, str);
-	}
-	if (check_container(line) == 1)
-	{
-		return (ft_adeblas(line));
+		bites = read(fd, str, BUFFER_SIZE);
+		str[bites] = 0;
+		container = ft_strjoin(container, str);
 	}
 	free(str);
+	if (check_container(container) != 0)
+	{
+		jump = check_container(container);
+		line_return = ft_line_return(container, jump);
+		container = new_container(container, jump);
+		return (line_return);
+	}
 	return (0);
+}
+/*
+void leaks()
+{
+	system("leaks -q a.out");
 }
 
 int main(void)
@@ -134,16 +153,18 @@ int main(void)
 	int		xd = 0;
 	char	*str;
 
-	printf("holla");
+	atexit(leaks);
 	fd = open("LINES", O_RDONLY);
 	str = get_next_line(fd);
-	/*while (str != 0)
+	while (str != 0)
 	{
-		printf("-%s-", str);
+		printf("%s", str);
 		free(str);
 		str = get_next_line(fd);
-	}*/
+	}
 	free(str);
-	close(fd);
+	if (str[0] == 0)
+		printf("aa");
 	return (0);
 }
+*/
