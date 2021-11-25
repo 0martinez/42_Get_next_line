@@ -6,7 +6,7 @@
 /*   By: omartine <omartine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 17:35:34 by omartine          #+#    #+#             */
-/*   Updated: 2021/11/25 20:28:59 by omartine         ###   ########.fr       */
+/*   Updated: 2021/11/25 20:44:38 by omartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static int	check_container(char *container)
 static char	*ft_line_return(char *container, int jump)
 {
 	int		i;
+	int		j;
 	char	*line_return;
 
 	i = 0;
@@ -116,8 +117,6 @@ char	*get_next_line(int fd)
 	char		*str;
 	static char	*container;
 
-	if (!fd)
-		return (0);
 	bites = 1;
 	jump = 0;
 	str = malloc(sizeof(char) * BUFFER_SIZE + 1);
@@ -163,8 +162,6 @@ int main(void)
 		str = get_next_line(fd);
 	}
 	free(str);
-	if (str[0] == 0)
-		printf("aa");
 	return (0);
 }
 */
