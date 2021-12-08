@@ -6,7 +6,7 @@
 /*   By: omartine <omartine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 19:46:58 by omartine          #+#    #+#             */
-/*   Updated: 2021/11/25 20:44:40 by omartine         ###   ########.fr       */
+/*   Updated: 2021/12/03 18:43:56 by omartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
-/*
-#ifndef BUFFER_SIZE
-#define BUFFER_SIZE = 1000;*/
+
+int		ft_strlen(char *str);
+
+char	*ft_strjoin(char *container, char *str);
+
+char	*line_no_jump(char *str);
 
 #endif
