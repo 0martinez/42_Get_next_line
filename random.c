@@ -20,10 +20,14 @@ void leaks()
 	system("leaks -q a.out");
 }
 
-static char	*to_be_free(char *str)
+static void	to_be_free(char *str)
 {
-	free(str);
-	return (0);
+	str = malloc (5);
+	str[0] = '1';
+	str[1] = '2';
+	str[2] = '3';
+	str[3] = '4';
+	str[4] = 0;
 }
 
 int	main(void)
@@ -34,6 +38,12 @@ int	main(void)
 	if (!str)
 	{
 		printf("a");
+	}
+	to_be_free(str);
+	printf("------%s-----", str);
+	if (str)
+	{
+		printf("lol");
 	}
 	str = malloc (sizeof(char) * 4 + 1);
 	if (str)

@@ -6,7 +6,7 @@
 /*   By: omartine <omartine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 17:35:34 by omartine          #+#    #+#             */
-/*   Updated: 2021/12/08 17:39:35 by omartine         ###   ########.fr       */
+/*   Updated: 2021/12/08 21:11:07 by omartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	check_container(char *container)
 	int	i;
 
 	i = 0;
-	if (container[0] == 0)
+	if (!container)
 		return (0);
 	while (container[i] != 0)
 	{
@@ -68,22 +68,48 @@ static char	*new_container(char *container, int jump)
 	return (new_container);
 }
 
+static char	*ft_line(char *container)
+{
+	int		jump;
+	char	*line_return;
+
+	if (check_container(container) != 0)
+	{
+		jump = check_container(container);
+		line_return = ft_line_return(container, jump);
+		return (line_return);
+	}
+	line_return = line_no_jump(container);
+	return (line_return);
+}
+
+static char	*ft_container(char *container)
+{
+	int		jump;
+
+	if (check_container(container) != 0)
+	{
+		jump = check_container(container);
+		container = new_container(container, jump);
+		return (container);
+	}
+	free(container);
+	return (0);
+}
+
 char	*get_next_line(int fd)
 {
-	int			jump;
 	int			bites;
 	char		*line_return;
 	char		*str;
 	static char	*container;
 
-	bites = 1;
-	jump = 0;
 	str = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!container)
 		container = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!str || BUFFER_SIZE <= 0)
+	if (!str || BUFFER_SIZE <= 0 || !container)
 		return (0);
-	while ((bites > 0 && check_container(container) == 0))
+	while (check_container(container) == 0)
 	{
 		bites = read(fd, str, BUFFER_SIZE);
 		if (bites <= 0)
@@ -92,21 +118,13 @@ char	*get_next_line(int fd)
 		container = ft_strjoin(container, str);
 	}
 	free(str);
-	if (container[0] == 0)
+	if (!container)
 	{
 		free(container);
 		return (0);
 	}
-	if (check_container(container) != 0)
-	{
-		jump = check_container(container);
-		line_return = ft_line_return(container, jump);
-		container = new_container(container, jump);
-		return (line_return);
-	}
-	line_return = line_no_jump(container);
-	free(container);
-	container = 0;
+	line_return = ft_line(container);
+	container = ft_container(container);
 	return (line_return);
 }
 /*
