@@ -6,27 +6,11 @@
 /*   By: omartine <omartine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 17:35:34 by omartine          #+#    #+#             */
-/*   Updated: 2021/12/08 21:11:07 by omartine         ###   ########.fr       */
+/*   Updated: 2021/12/09 19:55:55 by omartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-static int	check_container(char *container)
-{
-	int	i;
-
-	i = 0;
-	if (!container)
-		return (0);
-	while (container[i] != 0)
-	{
-		if (container[i] == '\n')
-			return (i + 1);
-		i++;
-	}
-	return (0);
-}
 
 static char	*ft_line_return(char *container, int jump)
 {
@@ -118,11 +102,6 @@ char	*get_next_line(int fd)
 		container = ft_strjoin(container, str);
 	}
 	free(str);
-	if (!container)
-	{
-		free(container);
-		return (0);
-	}
 	line_return = ft_line(container);
 	container = ft_container(container);
 	return (line_return);

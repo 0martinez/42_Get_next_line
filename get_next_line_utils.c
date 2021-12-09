@@ -6,7 +6,7 @@
 /*   By: omartine <omartine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 17:35:56 by omartine          #+#    #+#             */
-/*   Updated: 2021/12/08 18:37:02 by omartine         ###   ########.fr       */
+/*   Updated: 2021/12/09 19:56:20 by omartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,20 @@ char	*line_no_jump(char *str)
 		i++;
 	}
 	return (to_return);
+}
+
+int	check_container(char *container)
+{
+	int	i;
+
+	i = 0;
+	if (!container)
+		return (0);
+	while (container[i] != 0)
+	{
+		if (container[i] == '\n')
+			return (i + 1);
+		i++;
+	}
+	return (0);
 }
