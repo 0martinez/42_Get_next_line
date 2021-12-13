@@ -6,7 +6,7 @@
 /*   By: omartine <omartine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 17:35:34 by omartine          #+#    #+#             */
-/*   Updated: 2021/12/09 19:55:55 by omartine         ###   ########.fr       */
+/*   Updated: 2021/12/13 17:57:55 by omartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ char	*get_next_line(int fd)
 void leaks()
 {
 	system("leaks -q a.out");
-}*/
-/*
+}
+
 int	main(void)
 {
 	int		fd;
