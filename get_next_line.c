@@ -6,7 +6,7 @@
 /*   By: omartine <omartine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 17:35:34 by omartine          #+#    #+#             */
-/*   Updated: 2021/12/13 17:57:55 by omartine         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:37:22 by omartine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,12 @@ char	*get_next_line(int fd)
 	char		*str;
 	static char	*container;
 
+	if (BUFFER_SIZE <= 0)
+		return (0);
 	str = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!container)
 		container = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!str || BUFFER_SIZE <= 0 || !container)
+	if (!str || !container)
 		return (0);
 	while (check_container(container) == 0)
 	{
@@ -117,8 +119,8 @@ int	main(void)
 	int		fd;
 	char	*str;
 
-	//atexit(leaks);
-	fd = open("./testgnl/files/41_no_nl", O_RDONLY);
+	atexit(leaks);
+	fd = open("./tester/files/41_no_nl", O_RDONLY);
 	str = get_next_line(fd);
 	while (str != 0)
 	{
